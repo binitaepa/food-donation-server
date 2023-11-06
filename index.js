@@ -29,6 +29,28 @@ async function run() {
     // Connect the client to the server	(optional starting in v4.7)
     // await client.connect();
     // Send a ping to confirm a successful connection
+    const featuresCollection=client.db('foodShare').collection('feature')
+    const foodCollection=client.db('foodCollect').collection('collection')
+    app.get('/feature',async(req,res)=>{
+        const cursor =featuresCollection.find();
+        const result=await cursor.toArray();
+        res.send(result);
+    })
+
+    app.get('/collection', async (req, res) => {
+        const cursor = foodCollection.find();
+        const result = await cursor.toArray();
+        res.send(result);
+    })
+
+    app.post('/collection', async (req, res) => {
+        const newFood = req.body;
+        console.log(newProduct);
+        const result = await foodCollection.insertOne(newFood);
+        res.send(result);
+    })
+   
+    
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
   } finally {
@@ -39,9 +61,9 @@ async function run() {
 run().catch(console.dir);
 
 app.get('/', (req, res) => {
-    res.send('cosmetics and beauty server is running')
+    res.send('Food server is running')
 })
 
 app.listen(port, () => {
-    console.log(`cosmetics and beauty is running on port: ${port}`)
+    console.log(`Food is running on port: ${port}`)
 })
