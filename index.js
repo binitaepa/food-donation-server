@@ -39,8 +39,24 @@ async function run() {
     app.get('/feature/:id', async (req, res) => {
         const id = req.params.id;
         const query = { _id: new ObjectId(id) }
-        const result = await cardCollection.findOne(query);
+        const result = await featuresCollection.findOne(query);
         res.send(result);
+    })
+    app.patch('/feature/:id',async(req,res)=>{
+        
+        const id=req.params.id;
+        const filter={_id:new ObjectId(id)};
+        const foodADD=req.body;
+        console.log(foodADD)
+        const updateDoc = {
+          $set: {
+              notes: foodADD.notes,
+              money:foodADD.money
+
+          },
+      };
+      const result = await featuresCollection.updateOne(filter, updateDoc);
+      res.send(result);
     })
 
     app.get('/collection', async (req, res) => {
