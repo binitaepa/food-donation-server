@@ -64,7 +64,18 @@ async function run() {
         const result = await cursor.toArray();
         res.send(result);
     })
-
+    app.get('/collection',async(req,res)=>{
+        // console.log('token',req.cookies.token)
+        console.log(req.query.email);
+        console.log('user in the valid token',req.user)
+       
+                let query={};
+                if(req.query?.email){
+                    query= {email:req.query.email}
+                }
+                const result =await foodCollection.find().toArray();
+               res.send(result);
+            })
     app.post('/collection', async (req, res) => {
         const newFood = req.body;
         console.log(newFood);
