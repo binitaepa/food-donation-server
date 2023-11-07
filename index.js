@@ -29,8 +29,8 @@ async function run() {
     // Connect the client to the server	(optional starting in v4.7)
     // await client.connect();
     // Send a ping to confirm a successful connection
-    const featuresCollection=client.db('foodShare').collection('feature')
-    const foodCollection=client.db('foodCollect').collection('collection')
+    const featuresCollection=client.db('foodShare').collection('feature');
+    const foodCollection=client.db('foodShare').collection('collection');
     app.get('/feature',async(req,res)=>{
         const cursor =featuresCollection.find();
         const result=await cursor.toArray();
@@ -67,7 +67,7 @@ async function run() {
 
     app.post('/collection', async (req, res) => {
         const newFood = req.body;
-        console.log(newProduct);
+        console.log(newFood);
         const result = await foodCollection.insertOne(newFood);
         res.send(result);
     })
