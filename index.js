@@ -30,7 +30,7 @@ async function run() {
     // await client.connect();
     // Send a ping to confirm a successful connection
     const featuresCollection=client.db('foodShare').collection('feature');
-    const foodCollection=client.db('foodShare').collection('collection');
+    const collection=client.db('foodShare').collection('collection');
     app.get('/feature',async(req,res)=>{
         const cursor =featuresCollection.find();
         const result=await cursor.toArray();
@@ -60,7 +60,7 @@ async function run() {
     })
 
     app.get('/collection', async (req, res) => {
-        const cursor = foodCollection.find();
+        const cursor = collection.find();
         const result = await cursor.toArray();
         res.send(result);
     })
@@ -73,16 +73,39 @@ async function run() {
                 if(req.query?.email){
                     query= {email:req.query.email}
                 }
-                const result =await foodCollection.find().toArray();
+                const result =await collection.find().toArray();
                res.send(result);
             })
     app.post('/collection', async (req, res) => {
         const newFood = req.body;
         console.log(newFood);
-        const result = await foodCollection.insertOne(newFood);
+        const result = await collection.insertOne(newFood);
         res.send(result);
     })
-   
+    app.patch('/collection/:id', async (req, res) => {
+        const id=req.params.id;
+      const filter={_id:new ObjectId(id)};
+      const updatedFood=req.body;
+      console.log(updatedFood)
+      const updateDoc = {
+        $set: {
+            foodstatus: updatedFood.foodstatus
+        },
+    };
+
+      
+
+        const result = await collection.updateOne(filter, updateDoc);
+        res.send(result);
+    })
+    app.delete('/collection/:id',async(req,res)=>{
+        const id=req.params.id;
+        console.log(id)
+        const query={_id:new ObjectId(id)};
+        const result= await collection.deleteOne(query);
+        res.send(result);
+  
+      })
     
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
